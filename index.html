@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Card ──────────────────────────────────────────── */
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 640px;
+      padding: 2.5rem 2rem;
+      animation: fadeUp 0.5s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 0.25rem;
+      font-size: 1.8rem;
+    }
+
+    .form-card .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    /* ── Form Row ──────────────────────────────────────── */
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      flex: 1 1 100%;
+      position: relative;
+    }
+
+    .form-row .form-group {
+      flex: 1 1 calc(50% - 0.5rem);
+    }
+
+    /* ── Labels ────────────────────────────────────────── */
+    label {
+      display: block;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    label .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+
+    /* ── Inputs & Textarea ─────────────────────────────── */
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: #333;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      outline: none;
+      background: #fafafa;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      background: #fff;
+    }
+
+    /* Valid / Invalid visual cues */
+    input.valid,
+    select.valid,
+    textarea.valid {
+      border-color: #2ecc71;
+    }
+
+    input.invalid,
+    select.invalid,
+    textarea.invalid {
+      border-color: #e74c3c;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.4rem;
+    }
+
+    /* ── Radio & Checkbox Groups ───────────────────────── */
+    .option-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.2rem;
+      margin-top: 0.2rem;
+    }
+
+    .option-group label {
+      display: flex;
+      align-items: center;
+      font-weight: 400;
+      cursor: pointer;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      transition: background 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+
+    .option-group label:hover {
+      background: #f0f0ff;
+      border-color: #c5c5f0;
+    }
+
+    .option-group input:checked + span {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .option-group label:has(input:checked) {
+      border-color: #667eea;
+      background: #f0f0ff;
+    }
+
+    .option-group input[type="radio"],
+    .option-group input[type="checkbox"] {
+      accent-color: #667eea;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── Error Messages ────────────────────────────────── */
+    .error-msg {
+      color: #e74c3c;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      min-height: 1.1em;
+      transition: opacity 0.2s;
+    }
+
+    /* ── Character Counter ─────────────────────────────── */
+    .char-counter {
+      text-align: right;
+      font-size: 0.78rem;
+      color: #999;
+      margin-top: 0.2rem;
+    }
+
+    .char-counter.warn {
+      color: #e67e22;
+    }
+
+    .char-counter.danger {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+
+    /* ── Submit Button ─────────────────────────────────── */
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 0.85rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: transform 0.15s, box-shadow 0.25s, opacity 0.25s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.45);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Success Overlay ───────────────────────────────── */
+    .success-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .success-overlay.show {
+      display: flex;
+    }
+
+    .success-overlay .checkmark {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pop 0.4s ease-out;
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(0); }
+      70%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .success-overlay h2 {
+      color: #2ecc71;
+      margin-bottom: 0.5rem;
+    }
+
+    .success-overlay p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-reset {
+      padding: 0.6rem 2rem;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-reset:hover {
+      background: #764ba2;
+    }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 500px) {
+      .form-row .form-group {
+        flex: 1 1 100%;
+      }
+
+      .form-card {
+        padding: 1.5rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-card">
+    <!-- ═══ Form ═══ -->
+    <form id="contactForm" novalidate>
+      <h1>Contact Us</h1>
+      <p class="subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you shortly.</p>
+
+      <!-- ── Name & Email ── -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" name="fullName" placeholder="John Doe" />
+          <div class="error-msg" id="fullNameError"></div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="john@example.com" />
+          <div class="error-msg" id="emailError"></div>
+        </div>
+      </div>
+
+      <!-- ── Phone & Subject ── -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123‑4567" />
+          <div class="error-msg" id="phoneError"></div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject <span class="required">*</span></label>
+          <input type="text" id="subject" name="subject" placeholder="Brief subject line" />
+          <div class="error-msg" id="subjectError"></div>
+        </div>
+      </div>
+
+      <!-- ── Inquiry Type (Radio Buttons) ── -->
+      <div class="form-group">
+        <label>Inquiry Type <span class="required">*</span></label>
+        <div class="option-group" id="inquiryGroup">
+          <label><input type="radio" name="inquiry" value="general" /><span>General</span></label>
+          <label><input type="radio" name="inquiry" value="support" /><span>Support</span></label>
+          <label><input type="radio" name="inquiry" value="sales" /><span>Sales</span></label>
+          <label><input type="radio" name="inquiry" value="feedback" /><span>Feedback</span></label>
+        </div>
+        <div class="error-msg" id="inquiryError"></div>
+      </div>
+
+      <!-- ── Services (Checkboxes) ── -->
+      <div class="form-group">
+        <label>Services You're Interested In</label>
+        <div class="option-group" id="servicesGroup">
+          <label><input type="checkbox" name="services" value="web_design" /><span>Web Design</span></label>
+          <label><input type="checkbox" name="services" value="development" /><span>Development</span></label>
+          <label><input type="checkbox" name="services" value="seo" /><span>SEO</span></label>
+          <label><input type="checkbox" name="services" value="marketing" /><span>Marketing</span></label>
+          <label><input type="checkbox" name="services" value="consulting" /><span>Consulting</span></label>
+        </div>
+      </div>
+
+      <!-- ── How Did You Hear (Dropdown) ── -->
+      <div class="form-group">
+        <label for="source">How Did You Hear About Us? <span class="required">*</span></label>
+        <select id="source" name="source">
+          <option value="" disabled selected>— Please select —</option>
+          <option value="search_engine">Search Engine (Google, Bing)</option>
+          <option value="social_media">Social Media</option>
+          <option value="friend_referral">Friend / Referral</option>
+          <option value="advertisement">Advertisement</option>
+          <option value="blog_article">Blog / Article</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="error-msg" id="sourceError"></div>
+      </div>
+
+      <!-- ── Message (Textarea) ── -->
+      <div class="form-group">
+        <label for="message">Message <span class="required">*</span></label>
+        <textarea id="message" name="message" placeholder="Tell us how we can help you…" maxlength="500"></textarea>
+        <div class="char-counter" id="charCounter">0 / 500</div>
+        <div class="error-msg" id="messageError"></div>
+      </div>
+
+      <!-- ── Agree to Terms (Checkbox) ── -->
+      <div class="form-group">
+        <label style="display:flex; align-items:center; gap:0.5rem; font-weight:400; cursor:pointer;">
+          <input type="checkbox" id="terms" name="terms" style="accent-color:#667eea; width:16px; height:16px;" />
+          <span>I agree to the <a href="#" style="color:#667eea;">Terms &amp; Privacy Policy</a> <span class="required">*</span></span>
+        </label>
+        <div class="error-msg" id="termsError"></div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
+    </form>
+
+    <!-- ═══ Success Screen ═══ -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="checkmark">✅</div>
+      <h2>Thank You!</h2>
+      <p>Your message has been sent successfully.<br />We'll get back to you within 24 hours.</p>
+      <button class="btn-reset" id="resetBtn">Send Another Message</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       JavaScript — Validation & Input Handling
+       ═══════════════════════════════════════════════════ -->
+  <script>
+    (() => {
+      "use strict";
+
+      // ── DOM References ────────────────────────────────
+      const form       = document.getElementById("contactForm");
+      const overlay    = document.getElementById("successOverlay");
+      const submitBtn  = document.getElementById("submitBtn");
+      const resetBtn   = document.getElementById("resetBtn");
+
+      const fields = {
+        fullName: document.getElementById("fullName"),
+        email:    document.getElementById("email"),
+        phone:    document.getElementById("phone"),
+        subject:  document.getElementById("subject"),
+        source:   document.getElementById("source"),
+        message:  document.getElementById("message"),
+        terms:    document.getElementById("terms"),
+      };
+
+      // ── Validation Rules ──────────────────────────────
+      const rules = {
+        fullName: {
+          validate(v) {
+            if (!v.trim()) return "Full name is required.";
+            if (v.trim().length < 2) return "Name must be at least 2 characters.";
+            if (!/^[a-zA-Z\s'-]+$/.test(v.trim())) return "Name can only contain letters, spaces, hyphens, and apostrophes.";
+            return "";
+          },
+        },
+        email: {
+          validate(v) {
+            if (!v.trim()) return "Email address is required.";
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())) return "Please enter a valid email address.";
+            return "";
+          },
+        },
+        phone: {
+          validate(v) {
+            if (!v.trim()) return ""; // optional
+            if (!/^[+\d\s()-]{7,20}$/.test(v.trim())) return "Please enter a valid phone number.";
+            return "";
+          },
+        },
+        subject: {
+          validate(v) {
+            if (!v.trim()) return "Subject is required.";
+            if (v.trim().length < 3) return "Subject must be at least 3 characters.";
+            return "";
+          },
+        },
+        source: {
+          validate(v) {
+            if (!v) return "Please select how you heard about us.";
+            return "";
+          },
+        },
+        message: {
+          validate(v) {
+            if (!v.trim()) return "Message is required.";
+            if (v.trim().length < 10) return "Message must be at least 10 characters.";
+            return "";
+          },
+        },
+        terms: {
+          validate() {
+            if (!fields.terms.checked) return "You must agree to the terms.";
+            return "";
+          },
+        },
+        inquiry: {
+          validate() {
+            const checked = document.querySelector('input[name="inquiry"]:checked');
+            if (!checked) return "Please select an inquiry type.";
+            return "";
+          },
+        },
+      };
+
+      // ── Helper: Show / Clear Error ────────────────────
+      function showError(name, msg) {
+        const el = document.getElementById(name + "Error");
+        if (el) el.textContent = msg;
+
+        const input = fields[name];
+        if (input && input.tagName !== undefined) {
+          input.classList.toggle("invalid", !!msg);
+          input.classList.toggle("valid", !msg && input.value !== undefined && input.value !== "");
+        }
+      }
+
+      // ── Real-Time Validation on blur / change ─────────
+      Object.keys(fields).forEach((name) => {
+        const el = fields[name];
+        const eventType = el.type === "checkbox" || el.tagName === "SELECT" ? "change" : "blur";
+
+        el.addEventListener(eventType, () => {
+          if (rules[name]) {
+            const msg = rules[name].validate(el.type === "checkbox" ? "" : el.value);
+            showError(name, msg);
+          }
+        });
+
+        // Also validate on input for instant feedback after first blur
+        if (el.tagName === "INPUT" && el.type !== "checkbox") {
+          let blurred = false;
+          el.addEventListener("blur", () => (blurred = true));
+          el.addEventListener("input", () => {
+            if (blurred && rules[name]) {
+              showError(name, rules[name].validate(el.value));
+            }
+          });
+        }
+      });
+
+      // Radio buttons — validate on change
+      document.querySelectorAll('input[name="inquiry"]').forEach((radio) => {
+        radio.addEventListener("change", () => showError("inquiry", rules.inquiry.validate()));
+      });
+
+      // ── Character Counter for Message ─────────────────
+      const charCounter = document.getElementById("charCounter");
+      fields.message.addEventListener("input", () => {
+        const len = fields.message.value.length;
+        const max = 500;
+        charCounter.textContent = `${len} / ${max}`;
+        charCounter.classList.toggle("warn", len >= max * 0.8 && len < max);
+        charCounter.classList.toggle("danger", len >= max);
+      });
+
+      // ── Form Submission ───────────────────────────────
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let firstInvalid = null;
+        let isValid = true;
+
+        // Validate every rule
+        for (const name of Object.keys(rules)) {
+          const val = fields[name] ? (fields[name].type === "checkbox" ? "" : fields[name].value) : "";
+          const msg = rules[name].validate(val);
+          showError(name, msg);
+          if (msg) {
+            isValid = false;
+            if (!firstInvalid) {
+              firstInvalid = fields[name] || document.querySelector(`[name="${name}"]`);
+            }
+          }
+        }
+
+        if (!isValid) {
+          // Scroll to & focus the first invalid field
+          if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstInvalid.focus?.();
+          }
+          return;
+        }
+
+        // Collect form data
+        const formData = {
+          fullName: fields.fullName.value.trim(),
+          email:    fields.email.value.trim(),
+          phone:    fields.phone.value.trim(),
+          subject:  fields.subject.value.trim(),
+          inquiry:  document.querySelector('input[name="inquiry"]:checked').value,
+          services: [...document.querySelectorAll('input[name="services"]:checked')].map((cb) => cb.value),
+          source:   fields.source.value,
+          message:  fields.message.value.trim(),
+        };
+
+        console.log("📬 Form submitted:", formData);
+
+        // Simulate sending (disable button briefly)
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+
+        setTimeout(() => {
+          form.style.display = "none";
+          overlay.classList.add("show");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send Message";
+        }, 800);
+      });
+
+      // ── Reset ─────────────────────────────────────────
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        overlay.classList.remove("show");
+        form.style.display = "";
+
+        // Clear all visual states
+        document.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+        document.querySelectorAll(".valid, .invalid").forEach((el) => {
+          el.classList.remove("valid", "invalid");
+        });
+        charCounter.textContent = "0 / 500";
+        charCounter.classList.remove("warn", "danger");
+      });
+    })();
+  </script>
+</body>
+</html>
